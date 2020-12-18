@@ -1,0 +1,227 @@
+[
+    {
+        "id": "4e4a8a37.9ab614",
+        "type": "file",
+        "z": "80f2bb49.399d18",
+        "name": "",
+        "filename": "receiveCam002.jpg",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 490,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7fec07f9.894de",
+        "type": "template",
+        "z": "80f2bb49.399d18",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "text",
+        "syntax": "mustache",
+        "template": "file receved",
+        "output": "str",
+        "x": 460,
+        "y": 80,
+        "wires": [
+            [
+                "1c8e6404.067d14"
+            ]
+        ]
+    },
+    {
+        "id": "1c8e6404.067d14",
+        "type": "http response",
+        "z": "80f2bb49.399d18",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 650,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "a9c62c2f.3e238",
+        "type": "http in",
+        "z": "80f2bb49.399d18",
+        "name": "",
+        "url": "/mypost02",
+        "method": "post",
+        "upload": true,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 100,
+        "wires": [
+            [
+                "86f6de39.7d8dc"
+            ]
+        ]
+    },
+    {
+        "id": "86f6de39.7d8dc",
+        "type": "function",
+        "z": "80f2bb49.399d18",
+        "name": "",
+        "func": "let mymsgB={};\nvar myArray = [];\nmyArray=msg.req.files[0].buffer;\nmymsgB.payload=myArray;\nmymsgB.filename=\"receiveCam002.jpg\";\n\nreturn [msg,mymsgB];",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 300,
+        "y": 100,
+        "wires": [
+            [
+                "7fec07f9.894de"
+            ],
+            [
+                "4e4a8a37.9ab614",
+                "d78a48d7.aabe88"
+            ]
+        ]
+    },
+    {
+        "id": "d78a48d7.aabe88",
+        "type": "file",
+        "z": "80f2bb49.399d18",
+        "name": "",
+        "filename": "./node-red-static/receiveCam002.jpg",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 550,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "aa659aad.f23098",
+        "type": "http in",
+        "z": "80f2bb49.399d18",
+        "name": "",
+        "url": "/get02",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 240,
+        "wires": [
+            [
+                "e56145c4.56f48"
+            ]
+        ]
+    },
+    {
+        "id": "e56145c4.56f48",
+        "type": "file in",
+        "z": "80f2bb49.399d18",
+        "name": "",
+        "filename": "receiveCam002.jpg",
+        "format": "",
+        "x": 290,
+        "y": 240,
+        "wires": [
+            [
+                "93a651f2.d12df"
+            ]
+        ]
+    },
+    {
+        "id": "93a651f2.d12df",
+        "type": "change",
+        "z": "80f2bb49.399d18",
+        "name": "Set Headers",
+        "rules": [
+            {
+                "t": "set",
+                "p": "headers",
+                "pt": "msg",
+                "to": "{}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "headers.content-type",
+                "pt": "msg",
+                "to": "image/jpeg",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 470,
+        "y": 240,
+        "wires": [
+            [
+                "20f531d2.10edc6"
+            ]
+        ]
+    },
+    {
+        "id": "20f531d2.10edc6",
+        "type": "http response",
+        "z": "80f2bb49.399d18",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 610,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "95e08f9a.5e1ac",
+        "type": "http in",
+        "z": "80f2bb49.399d18",
+        "name": "",
+        "url": "/get022",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 300,
+        "wires": [
+            [
+                "36711260.104d1e"
+            ]
+        ]
+    },
+    {
+        "id": "5f83ea15.85183c",
+        "type": "http response",
+        "z": "80f2bb49.399d18",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 610,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "36711260.104d1e",
+        "type": "template",
+        "z": "80f2bb49.399d18",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width\">\n    <meta http-equiv=\"refresh\" content=\"2; URL=\">\n    <title>Document</title>\n</head>\n<body>\n    <img src=\"./receiveCam002.jpg\" width=\"100%\">\n</body>",
+        "output": "str",
+        "x": 340,
+        "y": 300,
+        "wires": [
+            [
+                "5f83ea15.85183c"
+            ]
+        ]
+    }
+]
