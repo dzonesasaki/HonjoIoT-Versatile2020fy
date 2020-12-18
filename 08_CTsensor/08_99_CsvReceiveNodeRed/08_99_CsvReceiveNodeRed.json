@@ -1,0 +1,97 @@
+[
+    {
+        "id": "9b3687a0.66a128",
+        "type": "mqtt in",
+        "z": "f61cf7aa.e627d",
+        "name": "",
+        "topic": "myTopic",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "4e38b730.53a58",
+        "x": 140,
+        "y": 100,
+        "wires": [
+            [
+                "53dd59d2.d3dad8"
+            ]
+        ]
+    },
+    {
+        "id": "212a6d2.4d54f92",
+        "type": "debug",
+        "z": "f61cf7aa.e627d",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 670,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "53dd59d2.d3dad8",
+        "type": "csv",
+        "z": "f61cf7aa.e627d",
+        "name": "",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 310,
+        "y": 100,
+        "wires": [
+            [
+                "391eec55.13d354"
+            ]
+        ]
+    },
+    {
+        "id": "391eec55.13d354",
+        "type": "function",
+        "z": "f61cf7aa.e627d",
+        "name": "",
+        "func": "var Irms=msg.payload.col1;\nvar Pow=msg.payload.col2;\nvar myValues = {Irms:Irms,Pow:Pow}\nmsg.payload=myValues\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 480,
+        "y": 100,
+        "wires": [
+            [
+                "212a6d2.4d54f92"
+            ]
+        ]
+    },
+    {
+        "id": "4e38b730.53a58",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": false,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    }
+]
