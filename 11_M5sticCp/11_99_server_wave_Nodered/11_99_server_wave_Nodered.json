@@ -1,0 +1,86 @@
+[
+    {
+        "id": "33544d8f.d4d742",
+        "type": "http in",
+        "z": "8ed2ca59.b1ab38",
+        "name": "",
+        "url": "/mywav01",
+        "method": "post",
+        "upload": true,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 100,
+        "wires": [
+            [
+                "4f21851f.f61a14"
+            ]
+        ]
+    },
+    {
+        "id": "4f21851f.f61a14",
+        "type": "function",
+        "z": "8ed2ca59.b1ab38",
+        "name": "",
+        "func": "let mymsgB={};\nvar myArray = [];\nmyArray=msg.req.files[0].buffer;\nmymsgB.payload=myArray;\nmymsgB.filename=\"test02.wav\";\n\nreturn [msg,mymsgB];",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 280,
+        "y": 100,
+        "wires": [
+            [
+                "3e585342.2d96d4"
+            ],
+            [
+                "cda8294.1f42a58"
+            ]
+        ]
+    },
+    {
+        "id": "3e585342.2d96d4",
+        "type": "template",
+        "z": "8ed2ca59.b1ab38",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "text",
+        "syntax": "mustache",
+        "template": "file receved",
+        "output": "str",
+        "x": 500,
+        "y": 60,
+        "wires": [
+            [
+                "f2d8aca4.495dc8"
+            ]
+        ]
+    },
+    {
+        "id": "f2d8aca4.495dc8",
+        "type": "http response",
+        "z": "8ed2ca59.b1ab38",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 690,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "cda8294.1f42a58",
+        "type": "file",
+        "z": "8ed2ca59.b1ab38",
+        "name": "",
+        "filename": "./node-red-static/receivewav.wav",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 580,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    }
+]
