@@ -33,7 +33,7 @@ char *servC; //="192.168.1.2";//server address
 #define N_SAMPLE_IN_MILLI_SEC 44
 #define N_ITTER_READ_BUF  (N_SEC_REC * N_SAMPLE_IN_MILLI_SEC ) 
 //#define N_LEN_BUF_2BYTE 1000 
-#define N_LEN_BUF_2BYTE 700 
+#define N_LEN_BUF_2BYTE 1000 
 //#define N_BYTES_STRACT_PAR_SAMPLE 8
 //#define N_BYTES_STRACT_PAR_SAMPLE 4
 #define N_BYTES_STRACT_PAR_SAMPLE 2
@@ -112,7 +112,7 @@ void getData2(uint16_t *pu16Strm){
   uint8_t ui8Side = 0;
   gui8flagReadDone =0;
   //erReturns = i2s_read(I2S_NUM_0, (char *)gi8BufAll[ui8Side], N_LEN_BUF_ALL_BYTES, &uiGotLen,portMAX_DELAY);
-  xTaskCreate(taskI2sReading, "taskI2sReading", 2048, NULL, 1, &gxHandle);
+  //xTaskCreate(taskI2sReading, "taskI2sReading", 2048, NULL, 1, &gxHandle);
   
   for (int j = 0; j < N_ITTER_READ_BUF ; j++) 
   {
@@ -133,7 +133,7 @@ void getData2(uint16_t *pu16Strm){
 
   } // j
 
-  vTaskDelete(gxHandle);
+  //vTaskDelete(gxHandle);
   Serial.print(uiGotLen);
   Serial.print(" , ");
   Serial.print(erReturns);
@@ -151,7 +151,7 @@ void getEprom(void){
 
     ssidC = (char *)malloc(sizeof(char)*(ssidTa.length()+1));
     passC = (char *)malloc(sizeof(char)*(passTa.length()+1));
-    servC = (char *)malloc(sizeof(char)*(servTa.length()+1));
+//    servC = (char *)malloc(sizeof(char)*(servTa.length()+1));
 
     if (servTa.length()<1)
     {
@@ -161,7 +161,7 @@ void getEprom(void){
 
     ssidTa.toCharArray(ssidC, ssidTa.length()+1 );
     passTa.toCharArray(passC, passTa.length()+1 );
-    servTa.toCharArray(servC, servTa.length()+1 );
+//    servTa.toCharArray(servC, servTa.length()+1 );
 
     Serial.println(String(ssidC));
     Serial.println(String(passC));
@@ -309,22 +309,24 @@ void setup() {
   pinMode(PIN_LED_STICKC,OUTPUT);
   pinMode(PIN_BTN1_STICKC,INPUT);
 
+  xTaskCreate(taskI2sReading, "taskI2sReading", 2048, NULL, 1, &gxHandle);
+
   Serial.println("---push button");
   Serial.flush();
 
 }
 
-uint32_t gu32Cnt=0;
+volatile uint32_t gu32Cnt=0;
 void loop() {
 
-  if(gu32Cnt < 3)
+  if(gu32Cnt < 0x10000)
     digitalWrite(PIN_LED_STICKC,0);
   else
     digitalWrite(PIN_LED_STICKC,1);
 
   gu32Cnt++;
-  gu32Cnt &= 0x7;
-  skipNoisySound();
+  gu32Cnt &= 0x000fffff;
+  //skipNoisySound();
   //Serial.println(digitalRead(PIN_BTN1_STICKC));
   if(digitalRead(PIN_BTN1_STICKC)==0){
 
