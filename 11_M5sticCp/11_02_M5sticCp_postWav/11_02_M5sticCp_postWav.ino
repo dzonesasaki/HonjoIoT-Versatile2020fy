@@ -10,9 +10,9 @@ Preferences objEprom;
 #define URL1 "http://"
 #define URL2 ":1880/mywav01"
 
-char *ssidC; //="SSID";
-char *passC; //="PASSPHRESE"; 
-char *servC; //="192.168.1.2";//server address
+char *ssidC="SSID";
+char *passC="PASSPHRESE"; 
+char *servC="192.168.1.2";//server address
 
 
 // pin config
@@ -151,7 +151,7 @@ void getEprom(void){
 
     ssidC = (char *)malloc(sizeof(char)*(ssidTa.length()+1));
     passC = (char *)malloc(sizeof(char)*(passTa.length()+1));
-//    servC = (char *)malloc(sizeof(char)*(servTa.length()+1));
+    servC = (char *)malloc(sizeof(char)*(servTa.length()+1));
 
     if (servTa.length()<1)
     {
@@ -161,7 +161,7 @@ void getEprom(void){
 
     ssidTa.toCharArray(ssidC, ssidTa.length()+1 );
     passTa.toCharArray(passC, passTa.length()+1 );
-//    servTa.toCharArray(servC, servTa.length()+1 );
+    servTa.toCharArray(servC, servTa.length()+1 );
 
     Serial.println(String(ssidC));
     Serial.println(String(passC));
@@ -300,7 +300,7 @@ void CreateWavHeader(byte* header, int waveDataSize){
 
 void setup() {
   Serial.begin(115200);
-  getEprom();
+  //getEprom();
   initWifiClient();
   myHttp.setReuse(true);
 
@@ -316,16 +316,16 @@ void setup() {
 
 }
 
-volatile uint32_t gu32Cnt=0;
+uint32_t gu32CntLedBlink = 0;
 void loop() {
 
-  if(gu32Cnt < 0x10000)
-    digitalWrite(PIN_LED_STICKC,0);
-  else
-    digitalWrite(PIN_LED_STICKC,1);
+  if(gu32CntLedBlink == 0x0000)
+    digitalWrite(PIN_LED_STICKC,0);// LED turn ON
+  if(gu32CntLedBlink == 0x0400)
+    digitalWrite(PIN_LED_STICKC,1);// LED turn off
 
   gu32Cnt++;
-  gu32Cnt &= 0x000fffff;
+  gu32CntLedBlink &= 0x003fffff;
   //skipNoisySound();
   //Serial.println(digitalRead(PIN_BTN1_STICKC));
   if(digitalRead(PIN_BTN1_STICKC)==0){
