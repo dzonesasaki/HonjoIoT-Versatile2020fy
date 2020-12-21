@@ -324,7 +324,7 @@ void loop() {
   if(gu32CntLedBlink == 0x0400)
     digitalWrite(PIN_LED_STICKC,1);// LED turn off
 
-  gu32Cnt++;
+  gu32CntLedBlink++;
   gu32CntLedBlink &= 0x003fffff;
   //skipNoisySound();
   //Serial.println(digitalRead(PIN_BTN1_STICKC));
