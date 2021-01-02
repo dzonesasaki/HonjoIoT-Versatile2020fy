@@ -33,3 +33,7 @@ Wi-Fiの設定については、正面のホワイトボードをご覧下さい
 - ラズパイの電源投入
 - Wi-Fi接続
 - (初回のみ)ターミナルから```sudo raspi-config --expand-rootfs``` を入力し再起動 (詳しくは付録A参照)
+
+当日配付したラズベリーパイは音が鳴りませんでした。下記をターミナルから入力すると音が鳴るように改善します。
+```sudo apt purge pulseaudio pulseaudio-utils```
+
