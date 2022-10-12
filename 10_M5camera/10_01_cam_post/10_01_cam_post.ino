@@ -11,6 +11,7 @@ Preferences objEprom;
 
 #define URL1 "http://"
 #define URL2 ":1880/mypost02"
+#define USE_WATCHDOG
 
 char *ssidC="SSID";
 char *passC="PASS"; 
@@ -180,9 +181,50 @@ int32_t httppost( uint8_t * ui8BufJpg, uint32_t iNumDat ){
 	return (httpResponseCode);
 }
 
+volatile int gviCountWatchDog=0;
+
+#ifdef USE_WATCHDOG
+
+#define NUM_1SEC_MICROSEC (1000000)
+#define NUM_SEC_TIMER (10)
+#define NUM_TIMER03_MICROSEC (NUM_SEC_TIMER*NUM_1SEC_MICROSEC)
+hw_timer_t * handleTimer03 = NULL; 
+
+
+#define NUM_MAX_WATCHDOG_SEC (6) // 60sec 
+
+void IRAM_ATTR irq_Timer03()
+{
+  gviCountWatchDog++;
+  if (gviCountWatchDog > NUM_MAX_WATCHDOG_SEC)
+  {
+    selfRestartProcess();
+  }
+}//irq_Timer03()
+
+void selfRestartProcess(void)
+{
+  ESP.restart(); // reboot
+}//selfRestartProcess()
+
+void init_TimerInterrupt03()
+{
+  gviCountWatchDog =0;
+  handleTimer03 = timerBegin(0, 80, true); // Num_timer ,  counter per clock 
+  timerAttachInterrupt(handleTimer03, &irq_Timer03, true);
+  timerAlarmWrite(handleTimer03, NUM_TIMER03_MICROSEC, true); //[us] per 80 clock @ 80MHz
+  timerAlarmEnable(handleTimer03);
+}//init_TimerInterrupt03()
+
+#endif
+
+
 void setup() {
   Serial.begin(115200);
   //getEprom();
+  #ifdef USE_WATCHDOG
+  init_TimerInterrupt03();
+  #endif
   initWifiClient();
   myHttp.setReuse(true);
   initCam();
@@ -204,6 +246,7 @@ void loop() {
   if (iRetHttp==200)
   {
     Serial.print("*");
+    gviCountWatchDog=0;
   }
   else
   {
